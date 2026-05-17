@@ -1,0 +1,88 @@
+"设置vundle
+set nocompatible
+filetype off
+
+" vim-plug 
+call plug#begin('~/.vim/plugged')
+Plug 'scrooloose/syntastic' "语法检查
+Plug 'scrooloose/nerdtree' "文件树
+Plug 'flazz/vim-colorschemes' "主题颜色插件
+Plug 'othree/xml.vim' "xml插件
+call plug#end()
+
+" --- Some Settings ---
+" quickfix模式
+autocmd FileType c,cpp map <buffer> <leader><space>:w<cr>:make<cr>
+" make运行
+:set makeprg=g++\ -Wall\ \ %
+colorscheme gruvbox " 设置配色方案
+
+" 配置
+syntax on "语法高亮
+filetype on "侦测文件类型
+filetype plugin on "载入文件类型插件
+filetype indent on "为特定文件类型载入相关缩进
+set completeopt=preview,menu "代码补全
+set clipboard+=unnamed "共享剪贴板
+set nocompatible "关闭vi模式
+set autoread "文件被改动时自动载入
+set autowrite "自动保存
+set ruler "打开状态栏标尺
+set cursorline "突出显示当前行
+set magic "正则相关
+set guioptions-=T "隐藏工具栏
+set guioptions-=m "隐藏菜单栏
+set autoindent "自动缩进
+set cindent "c语言缩进
+set smartindent "智能缩进
+set tabstop=4 "设置tab位4个空格
+set softtabstop=4 "设置tab为4个空格
+set shiftwidth=4 "换行时行间交错使用4个空格
+set noexpandtab "不要用空格键代替制表符
+set smarttab "在行和段开始处使用制表符
+set number "显示行号
+set history=1000 "历史记录数
+set nobackup "设置无备份文件
+set noswapfile "设置无交换文件
+set ignorecase "搜索忽略大小写
+set hlsearch "高亮显示搜索字符串
+set incsearch "输入关键字时高亮显示
+set gdefault "行内替换
+set enc=utf-8 "编码
+set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936 "编码设置
+set langmenu=zh_CN.UTF-8 
+set helplang=cn "语言设置
+set guifont=Monaco:h15 "字体和大小
+set laststatus=2 "总是显示状态行
+set cmdheight=2 "命令行高度
+set cursorline "高亮显示所在行
+set viminfo+=! "保存全局变量
+set iskeyword+=_,$,@,%,#,- "带有如下符号单词不换行
+set linespace=2 "字符间插入的像素行数目
+set wildmenu "增强模式的命令行自动完成操作
+set backspace=2 "回退键正常处理indent eol start等
+set whichwrap+=<,>,h,l "允许backspace和光标键跨越行边界
+set mouse=a "启用鼠标
+set selection=exclusive
+set selectmode=mouse,key
+set report=0 "哪一行被改动
+set fillchars=vert:\ ,stl:\ ,stlnc:\ "在被分割的窗口键显示空白，便于阅读 
+set showmatch "高亮显示匹配的行号
+set matchtime=1 "高亮时间
+set scrolloff=3 "光标移动到buffer顶部和底部保持3行距离
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7" "设置编辑模式下光标为竖线
+
+" NERDTree setting
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" map
+map <C-e> :NERDTreeMirror<CR>
+map <C-e> :NERDTreeToggle<CR>
+map <C-p> :MarkdownPreview<CR>
+
+" 插入模式下的快捷键
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
