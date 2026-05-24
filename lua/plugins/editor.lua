@@ -5,11 +5,16 @@ return {
     tag = "0.1.8",
     cmd = "Telescope",
     keys = {
-      { "<leader>ff" },
-      { "<leader>fg" },
-      { "<leader>fb" },
-      { "<leader>fh" },
-      { "<leader>f." },
+      { "<leader>ff", desc = "Find Files" },
+      { "<leader>fg", desc = "Live Grep" },
+      { "<leader>fb", desc = "Buffers" },
+      { "<leader>fh", desc = "Help Tags" },
+      { "<leader>f.", desc = "Recent Files" },
+      { "<leader>gc", desc = "Git Commits" },
+      { "<leader>gs", desc = "Git Status" },
+      { "<leader>gS", desc = "Git Stash" },
+      { "<leader>gl", desc = "Git Log" },
+      { "<leader>gf", desc = "Git File History" },
     },
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
@@ -19,11 +24,16 @@ return {
         },
       })
       local builtin = require("telescope.builtin")
-      vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "查找文件" })
-      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "全文搜索" })
-      vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "切换 Buffer" })
-      vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "搜索帮助" })
-      vim.keymap.set("n", "<leader>f.", builtin.oldfiles, { desc = "最近文件" })
+      vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
+      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Live Grep" })
+      vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Buffers" })
+      vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Help Tags" })
+      vim.keymap.set("n", "<leader>f.", builtin.oldfiles, { desc = "Recent Files" })
+      vim.keymap.set("n", "<leader>gc", builtin.git_commits, { desc = "Git Commits" })
+      vim.keymap.set("n", "<leader>gl", builtin.git_commits, { desc = "Git Log" })
+      vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Git Status" })
+      vim.keymap.set("n", "<leader>gS", builtin.git_stash, { desc = "Git Stash" })
+      vim.keymap.set("n", "<leader>gf", builtin.git_bcommits, { desc = "Git File History" })
     end,
   },
 

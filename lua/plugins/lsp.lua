@@ -16,16 +16,19 @@ return {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       local on_attach = function(client, bufnr)
-        local bufopts = { noremap = true, silent = true, buffer = bufnr }
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
-        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
-        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, bufopts)
-        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, bufopts)
-        vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, bufopts)
+        local opts = { noremap = true, silent = true, buffer = bufnr }
+        local function k(lhs, rhs, desc)
+          vim.keymap.set("n", lhs, rhs, vim.tbl_extend("force", opts, { desc = desc }))
+        end
+        k("gd", vim.lsp.buf.definition, "Go to definition")
+        k("K", vim.lsp.buf.hover, "Hover documentation")
+        k("gi", vim.lsp.buf.implementation, "Go to implementation")
+        k("<leader>rn", vim.lsp.buf.rename, "Rename")
+        k("<leader>ca", vim.lsp.buf.code_action, "Code action")
+        k("gr", vim.lsp.buf.references, "Find references")
+        k("[d", vim.diagnostic.goto_prev, "Previous diagnostic")
+        k("]d", vim.diagnostic.goto_next, "Next diagnostic")
+        k("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
       end
 
       -- Lua 特殊配置
@@ -50,11 +53,31 @@ return {
         on_attach = on_attach,
       }
 
+      vim.lsp.config.rust_analyzer = {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = {
+          ["rust-analyzer"] = {
+            checkOnSave = {
+              command = "clippy",
+            },
+          },
+        },
+      }
+
       -- 启用所有支持的 LSP server
       local servers = { "lua_ls", "pyright", "rust_analyzer", "ts_ls", "gopls" }
       for _, server in ipairs(servers) do
         vim.lsp.enable(server)
       end
+
+      vim.diagnostic.config({
+        virtual_text = true,
+        signs = true,
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+      })
     end,
   },
 
@@ -64,7 +87,7 @@ return {
     dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
     opts = {
       ensure_installed = {
-        "lua_ls", "pyright", "rust_analyzer", "ts_ls", "gopls", "tailwindcss",
+        "lua_ls", "pyright", "rust_analyzer", "ts_ls", "gopls", "tailwindcss", "prettierd",
       },
       automatic_installation = false,
     },

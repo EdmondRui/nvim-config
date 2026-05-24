@@ -80,7 +80,7 @@
 | 按键 | 功能 |
 |------|------|
 | `<Space>ff` | 搜索文件 |
-| `<Space>fg` | 全文搜索（grep） |
+| `<Space>fg` | 全文搜索（grep，需要ripgrep支持） |
 | `<Space>fb` | 切换 Buffer |
 | `<Space>fh` | 搜索帮助文档 |
 | `<Space>f.` | 最近打开的文件 |

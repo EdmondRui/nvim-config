@@ -49,7 +49,7 @@ opt.shortmess:append({ c = true })
 
 -- 不同文件类型的宽度设置
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "go", "rust" },
+  pattern = { "go", "rust", "java" },
   callback = function()
     vim.bo.tabstop = 4
     vim.bo.shiftwidth = 4
