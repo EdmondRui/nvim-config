@@ -1,176 +1,104 @@
-# Neovim 最佳实践配置指南
+# moonvim
 
-## 文件结构
+这是一个通过 `NVIM_APPNAME=moonvim` 运行的独立 Neovim 配置。
 
-```
-~/.config/nvim/
-├── init.lua                  # 入口
-└── lua/
-    ├── config/
-    │   ├── options.lua       # 全局设置
-    │   ├── keymaps.lua       # 快捷键
-    │   └── autocmds.lua      # 自动命令
-    └── plugins/
-        ├── core.lua          # 主题、状态栏、which-key
-        ├── editor.lua        # Telescope, Treesitter, nvim-cmp, Oil
-        ├── lsp.lua           # Mason + lspconfig + conform
-        └── git.lua           # fugitive + gitsigns
-```
+## 结构
 
-## 安装方法
-
-### 首次使用
-
-1. 确保已安装 Neovim >= 0.9
-2. 将配置放到 `~/.config/nvim/`
-3. 打开 Neovim，lazy.nvim 和所有插件会自动安装
-4. 重启 Neovim 即可正常使用
-
-### 手动安装插件
-
-```vim
-:Lazy
+```text
+init.lua
+lua/
+  config/
+    options.lua
+    keymaps.lua
+    autocmds.lua
+  plugins/
+    editor.lua
+    treesitter.lua
+    ui.lua
+    git.lua
+    help.lua
+  util.lua
 ```
 
-按 `I` 安装所有插件，按 `U` 更新插件。
+## 核心特性
 
-## 核心插件
+- `lazy.nvim` 自动引导
+- `catppuccin` 主题，当前使用 `mocha`
+- `telescope.nvim` 文件与内容搜索
+- `nvim-treesitter` 语法解析，使用 `main` 分支的新 API
+- `nvim-cmp` + `LuaSnip` 补全
+- `oil.nvim` 文件管理
+- `gitsigns.nvim` Git 变更标记
+- `lualine.nvim` 状态栏
+- `which-key.nvim` 快捷键提示
+- `Comment.nvim` 注释切换
+- `lazygit.nvim` Git UI
 
-| 插件 | 说明 |
-|------|------|
-| [lazy.nvim](https://github.com/folke/lazy.nvim) | 插件管理器，支持懒加载 |
-| [catppuccin](https://github.com/catppuccin/nvim) | 主题（mocha 口味） |
-| [lualine](https://github.com/nvim-lualine/lualine.nvim) | 状态栏 |
-| [which-key](https://github.com/folke/which-key.nvim) | 快捷键提示 |
-| [telescope](https://github.com/nvim-telescope/telescope.nvim) | 模糊搜索 |
-| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | 语法高亮与分析 |
-| [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) | 代码补全 |
-| [LuaSnip](https://github.com/L3MON4D3/LuaSnip) | 代码片段 |
-| [oil.nvim](https://github.com/stevearc/oil.nvim) | 文件树（类编辑器） |
-| [mason.nvim](https://github.com/williamboman/mason.nvim) | LSP 安装管理器 |
-| [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) | LSP 客户端配置 |
-| [conform.nvim](https://github.com/stevearc/conform.nvim) | 格式化 |
-| [Comment.nvim](https://github.com/numToStr/Comment.nvim) | 智能注释 |
-| [vim-fugitive](https://github.com/tpope/vim-fugitive) | Git 操作 |
-| [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim) | Git 行内标记 |
-
-## 快捷键一览
+## 主要快捷键
 
 ### 通用
 
-| 按键 | 功能 |
-|------|------|
-| `<Space>` | Leader 键 |
-| `<Space>w` | 保存文件 |
-| `<Space>q` | 关闭当前窗口 |
-| `<Space>bd` | 关闭当前 Buffer |
-| `<Tab>` / `<S-Tab>` | 切换 Buffer |
+- `<Space>`: leader
+- `<Space>w`: 保存
+- `<Space>q`: 退出当前窗口
+- `<Space>bd`: 关闭 buffer
+- `<Tab>` / `<S-Tab>`: 切换 buffer
 
-### 窗口管理
+### 窗口
 
-| 按键 | 功能 |
-|------|------|
-| `<C-h/j/k/l>` | 切换到左/下/上/右窗口 |
-| `<Space>wv` | 垂直分割 |
-| `<Space>ws` | 水平分割 |
-| `<Space>wd` | 关闭当前窗口 |
+- `<C-h/j/k/l>`: 切换窗口
+- `<Space>wv`: 垂直分屏
+- `<Space>ws`: 水平分屏
+- `<Space>wd`: 关闭窗口
 
-### 文件搜索（Telescope）
+### 搜索
 
-| 按键 | 功能 |
-|------|------|
-| `<Space>ff` | 搜索文件 |
-| `<Space>fg` | 全文搜索（grep，需要ripgrep支持） |
-| `<Space>fb` | 切换 Buffer |
-| `<Space>fh` | 搜索帮助文档 |
-| `<Space>f.` | 最近打开的文件 |
-
-### LSP
-
-| 按键 | 功能 |
-|------|------|
-| `gd` | 跳转到定义 |
-| `gi` | 跳转到实现 |
-| `gr` | 查看引用 |
-| `K` | 悬浮显示文档 |
-| `<Space>rn` | 重命名 |
-| `<Space>ca` | Code Action |
-| `<Space>d` | 显示诊断信息 |
-| `[d` / `]d` | 上一个/下一个诊断 |
-| `<Space>f` | 格式化代码 |
-
-### 文件树（Oil）
-
-| 按键 | 功能 |
-|------|------|
-| `<Space>e` | 打开文件树 |
+- `<Space>ff`: 查找文件
+- `<Space>fg`: 全文搜索
+- `<Space>fb`: buffer 列表
+- `<Space>fh`: 帮助标签
+- `<Space>f.`: 最近文件
 
 ### Git
 
-| 按键 | 功能 |
-|------|------|
-| `<Space>gg` | Git 状态 |
-| `<Space>gc` | Git 提交 |
-| `<Space>gp` | Git 推送 |
-| `<Space>gl` | Git 日志 |
-| `<Space>hs` | 暂存当前块 |
-| `<Space>hr` | 重置当前块 |
-| `<Space>hp` | 预览当前块 |
-| `]c` / `[c` | 下一个/上一个变更 |
+- `<Space>gg`: LazyGit
+- `<Space>gc`: Git commits
+- `<Space>gs`: Git status
+- `<Space>gS`: Git stash
+- `<Space>gl`: Git log
+- `<Space>gf`: 当前文件历史
+- `<Space>gh*`: gitsigns hunk 操作
 
-### 注释
+### 其他
 
-| 按键 | 功能 |
-|------|------|
-| `gcc` | 注释/取消注释当前行 |
-| `gbc` | 注释/取消注释选中块 |
+- `<Space>e`: 打开 Oil
+- `gcc` / `gbc`: 注释切换
 
-### 补全
+## 选项
 
-| 按键 | 功能 |
-|------|------|
-| `<C-Space>` | 手动触发补全 |
-| `<C-b>` / `<C-f>` | 滚动文档 |
-| `<C-e>` | 取消补全 |
-| `<Tab>` | 选择下一项 |
+- 2 空格缩进
+- 行号和相对行号
+- 关闭 swapfile 和 backup
+- 开启 undofile
+- go / rust / java 使用 4 空格缩进
 
-## 全局设置
+## 启动
 
-| 设置 | 值 | 说明 |
-|------|-----|------|
-| `tabstop` | 2 | 缩进宽度 |
-| `shiftwidth` | 2 | 缩进宽度 |
-| `expandtab` | true | 用空格代替 Tab |
-| `number` + `relativenumber` | true | 混合行号 |
-| `scrolloff` | 8 | 光标上下留白 |
-| `undofile` | true | 持久化撤销历史 |
-| `swapfile` / `backup` | false | 关闭交换/备份文件 |
+```bash
+NVIM_APPNAME=moonvim nvim
+```
 
-Go/Rust 文件自动使用 4 空格缩进。
+首次启动时会自动拉取 `lazy.nvim`，然后安装插件。
 
-## 自动命令
+更新插件和 Treesitter parser：
 
-| 触发时机 | 行为 |
-|----------|------|
-| 打开文件 | 回到上次关闭时的光标位置 |
-| 保存文件 | 自动创建不存在的目录 |
-| TextYankPost | 高亮被复制的文本（200ms） |
-| FileType go/rust | 自动切换 4 空格缩进 |
+```vim
+:Lazy sync
+:TSUpdate
+```
 
-## 预装 LSP / 格式化工具
+## 版本策略
 
-**LSP 服务器：** lua_ls, pyright, gopls, rust_analyzer, ts_ls
-**格式化工具：** stylua, black, isort, prettier, gofmt, goimports, rustfmt
-
-可通过 Mason 安装更多：`:Mason`
-
-## 常见操作
-
-| 需求 | 操作 |
-|------|------|
-| 安装新插件 | 在 `lua/plugins/` 下添加文件，重启后自动安装 |
-| 更新所有插件 | `:Lazy update` |
-| 查看快捷键 | `:WhichKey` |
-| 安装新 LSP | `:Mason` 搜索并安装 |
-| 查看 LSP 信息 | `:LspInfo` |
-| 搜索帮助 | `<Space>fh` |
+- 默认跟随插件仓库最新提交，不手动固定插件版本
+- `lazy.nvim` 的 lockfile 位置已改到 `stdpath("state")`
+- 仓库根目录不再保留 `lazy-lock.json`
